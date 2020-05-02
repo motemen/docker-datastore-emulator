@@ -417,6 +417,7 @@ const semverCompare = __webpack_require__(874);
                 Authorization: `Bearer ${authToken}`,
             },
         }).then(resp => resp.json());
+        core.debug(`tagsResp: ${JSON.stringify(tagsResp)}`);
         const tags = tagsResp['tags'];
         core.debug(`tags: ${tags}`);
         tags.sort(semverCompare);

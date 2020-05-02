@@ -34,6 +34,7 @@ import semverCompare = require('semver/functions/compare');
       }
     ).then(resp => resp.json());
 
+    core.debug(`tagsResp: ${JSON.stringify(tagsResp)}`);
     const tags: string[] = tagsResp['tags'];
     core.debug(`tags: ${tags}`);
     tags.sort(semverCompare);

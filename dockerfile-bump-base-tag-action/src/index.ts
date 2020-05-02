@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import * as fs from 'fs';
 import * as core from '@actions/core';
+import semverValid = require('semver/functions/valid');
 import semverCompare = require('semver/functions/compare');
 
 // possible options
@@ -12,21 +13,22 @@ import semverCompare = require('semver/functions/compare');
   try {
     const file = 'Dockerfile';
     const dockerfileContent = fs.readFileSync(file).toString('utf-8');
-    const m = /^FROM ([^:]+):(\S+)/m.exec(dockerfileContent); // FIXME
+    const m = /^FROM ([^:]+):([0-9.]+)((?:-\S+)?)/m.exec(dockerfileContent); // FIXME
     if (!m) {
       throw new Error(`Could not find FROM instruction from ${file}`);
     }
 
-    const [image, tag] = m;
-    const hubImage = '/'.indexOf(image) === -1 ? `library/${image}` : image;
+    const [, image, tag, variant] = m;
+    const hubImage = image.indexOf('/') === -1 ? `library/${image}` : image;
+
+    core.debug(`hubImage=${hubImage}; tag=${tag}`);
 
     const authTokenResp = await fetch(
       `https://auth.docker.io/token?service=registry.docker.io&scope=repository:${hubImage}:pull`
     ).then(resp => resp.json());
-    core.debug(`authTokenResp: ${JSON.stringify(authTokenResp)}`);
     const authToken = authTokenResp['token'];
 
-    const tagsResp = await fetch(
+    const tagsResp: any = await fetch(
       `https://registry.hub.docker.com/v2/${hubImage}/tags/list`,
       {
         headers: {
@@ -35,13 +37,17 @@ import semverCompare = require('semver/functions/compare');
       }
     ).then(resp => resp.json());
 
-    core.debug(`tagsResp: ${JSON.stringify(tagsResp)}`);
-    const tags: string[] = tagsResp['tags'];
-    core.debug(`tags: ${tags}`);
+    if (tagsResp.errors) {
+      throw new Error(`Fetching tags: ${JSON.stringify(tagsResp.errors)}`);
+    }
+
+    const tags: string[] = tagsResp['tags'].filter(semverValid);
     tags.sort(semverCompare);
+
     core.debug(`tags sorted: ${tags}`);
+
     const index = tags.indexOf(tag);
-    const nextTag = tags[index+1];
+    const nextTag = tags[index + 1];
     core.debug(`nextTag: ${nextTag}`);
   } catch (error) {
     core.setFailed(error.message);

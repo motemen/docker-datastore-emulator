@@ -14,7 +14,8 @@ jobs:
 
       - run: |
           tag=$(cat Dockerfile | perl -ne 'm<FROM google/cloud-sdk:(.+)> and print $1')
-          if ! git rev-parse --quiet --verify "refs/tags/$tag"; then
+          echo "tag: $tag"
+          if ! git rev-parse --quiet --verify "refs/tags/$tag" > /dev/null; then
             git tag "$tag"
             git push --tags
           fi

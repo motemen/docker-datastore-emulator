@@ -1,0 +1,21 @@
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: |
+          git fetch --tags
+
+      - run: |
+          tag=$(cat Dockerfile | perl -ne 'm<FROM google/cloud-sdk:(.+)> and print $1')
+          if ! git rev-parse --quiet --verify "refs/tags/$tag"; then
+            git tag "$tag"
+            git push --tags
+          fi
+

@@ -418,8 +418,9 @@ const semverCompare = __webpack_require__(874);
             },
         }).then(resp => resp.json());
         const tags = tagsResp['tags'];
-        tags.sort(semverCompare);
         core.debug(`tags: ${tags}`);
+        tags.sort(semverCompare);
+        core.debug(`tags sorted: ${tags}`);
         const index = tags.indexOf(tag);
         const nextTag = tags[index + 1];
         core.debug(`nextTag: ${nextTag}`);

@@ -5,12 +5,12 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "@types/node": "^10.0.3",
-    "@types/node-fetch": "^2.5.7",
-    "@types/semver": "^7.1.0",
-    "@zeit/ncc": "^0.22.1",
-    "gts": "^2.0.0",
-    "typescript": "~3.8.0"
+    "@types/node": "10.17.21",
+    "@types/node-fetch": "2.5.7",
+    "@types/semver": "7.1.0",
+    "@zeit/ncc": "0.22.1",
+    "gts": "2.0.0",
+    "typescript": "3.8.3"
   },
   "scripts": {
     "check": "gts check",
@@ -19,8 +19,8 @@
     "fix": "gts fix"
   },
   "dependencies": {
-    "@actions/core": "^1.2.4",
-    "node-fetch": "^2.6.0",
-    "semver": "^7.3.2"
+    "@actions/core": "1.2.4",
+    "node-fetch": "2.6.0",
+    "semver": "7.3.2"
   }
 }

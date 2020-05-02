@@ -1,8 +1,0 @@
-name: Dockerfile bump base tag
-description: Auto-follow Dockerfile base image tag updates
-outputs:
-  newTag:
-    description: updated image tag
-runs:
-  using: node12
-  main: dist/index.js

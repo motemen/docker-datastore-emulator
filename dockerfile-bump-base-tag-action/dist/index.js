@@ -411,6 +411,7 @@ const semverCompare = __webpack_require__(874);
         const [image, tag] = m;
         const hubImage = '/'.indexOf(image) === -1 ? `library/${image}` : image;
         const authTokenResp = await node_fetch_1.default(`https://auth.docker.io/token?service=registry.docker.io&scope=repository:${hubImage}:pull`).then(resp => resp.json());
+        core.debug(`authTokenResp: ${JSON.stringify(authTokenResp)}`);
         const authToken = authTokenResp['token'];
         const tagsResp = await node_fetch_1.default(`https://registry.hub.docker.com/v2/${hubImage}/tags/list`, {
             headers: {

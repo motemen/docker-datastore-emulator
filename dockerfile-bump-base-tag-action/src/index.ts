@@ -23,6 +23,7 @@ import semverCompare = require('semver/functions/compare');
     const authTokenResp = await fetch(
       `https://auth.docker.io/token?service=registry.docker.io&scope=repository:${hubImage}:pull`
     ).then(resp => resp.json());
+    core.debug(`authTokenResp: ${JSON.stringify(authTokenResp)}`);
     const authToken = authTokenResp['token'];
 
     const tagsResp = await fetch(

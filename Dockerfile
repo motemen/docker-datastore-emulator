@@ -4,4 +4,7 @@ FROM google/cloud-sdk:290.0.1
 
 EXPOSE 8081
 
+HEALTHCHECK --interval=3s --timeout=1s --retries=10 \
+    CMD curl --fail http://localhost:8081
+
 CMD ["gcloud", "beta", "emulators", "datastore", "start", "--host-port=0.0.0.0:8081"]

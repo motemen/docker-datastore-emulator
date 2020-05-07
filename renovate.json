@@ -1,6 +1,10 @@
 {
-  "extends": [
-    "config:base",
-    "docker:enableMajor"
+  "extends": ["config:base"],
+  "packageRules": [
+    {
+      "datasources": ["docker"],
+      "updateTypes": ["major"],
+      "enabled": true
+    }
   ]
 }

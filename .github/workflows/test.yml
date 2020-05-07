@@ -1,13 +1,17 @@
 on:
   pull_request:
 
+name: Test
+
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
 
-      - run: |
+      - name: Check if all images tags are met
+        run: |
           perl -nle 'm<FROM google/cloud-sdk:([0-9.]+)> and $seen{$1}++; END { die "tags differ: " . join " vs ", keys %seen if keys %seen != 1 }' $(find . -name Dockerfile | tee /dev/stderr)
 
       - run: |

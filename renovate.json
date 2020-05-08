@@ -1,11 +1,7 @@
 {
-  "extends": ["config:base"],
-  "automerge": true,
-  "packageRules": [
-    {
-      "datasources": ["docker"],
-      "updateTypes": ["major"],
-      "enabled": true
-    }
-  ]
+  "extends": [
+    "config:base",
+    "docker:enableMajor"
+  ],
+  "automerge": true
 }

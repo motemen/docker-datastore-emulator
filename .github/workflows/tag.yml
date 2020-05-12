@@ -15,7 +15,7 @@ jobs:
           git fetch --tags
 
       - run: |
-          tag=$(cat Dockerfile | perl -ne 'm<FROM google/cloud-sdk:(.+)> and print $1')
+          tag=$(./scripts/parse-dockerfile-from Dockerfile | cut -f2)
           echo "tag: $tag"
           if ! git rev-parse --quiet --verify "refs/tags/$tag" > /dev/null; then
             git tag "$tag"

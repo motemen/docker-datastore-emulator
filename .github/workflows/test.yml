@@ -1,4 +1,7 @@
 on:
+  push:
+    branches:
+      - master
   pull_request:
 
 name: Test
@@ -10,17 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Check if all images tags are met
-        run: |
-          perl -nle 'm<FROM google/cloud-sdk:([0-9.]+)> and $seen{$1}++; END { die "tags differ: " . join " vs ", keys %seen if keys %seen != 1 }' $(find . -name Dockerfile | tee /dev/stderr)
-
-      - name: Check if all variants correspond to their directories
-        run: |
-          set -e
-          for f in $(find . -name Dockerfile); do v=$(basename $(dirname $f)); v=${v#.}; head -1 "$f" | grep -e "[0-9]${v:+-$v}\$"; done
+      - run: |
+          ./scripts/check-bases
 
       - run: |
-          docker build .
+          ./scripts/check-variants
 
       - run: |
-          docker build ./alpine
+          ./scripts/check-builds

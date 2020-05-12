@@ -1,0 +1,12 @@
+#!/bin/bash
+
+base_dir=$(dirname "$0")
+
+while IFS= read -r -d '' dockerfile; do
+    while read -r _ _ variant; do
+        echo "$dockerfile: $variant" >&2
+        if [ "$(basename "$(dirname "$dockerfile")")" != "${variant:-.}" ]; then
+            exit 1
+        fi
+    done < <("$base_dir/parse-dockerfile-from" "$dockerfile")
+done < <(find . -name Dockerfile -print0)

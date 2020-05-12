@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+while IFS= read -r -d '' dockerfile; do
+    echo "$dockerfile"
+    docker build "$(dirname "$dockerfile")"
+done < <(find . -name Dockerfile -print0)

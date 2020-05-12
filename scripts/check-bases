@@ -1,0 +1,16 @@
+#!/bin/bash
+
+base_dir=$(dirname "$0")
+
+base_images=$(
+    while IFS= read -r -d '' dockerfile; do
+        base=$("$base_dir/parse-dockerfile-from" "$dockerfile" | awk '{ print $1 ":" $2 }')
+        echo "$dockerfile: $base" >&2
+        echo "$base"
+    done < <(find . -name Dockerfile -print0) | sort | uniq
+)
+
+if [ "$(echo "$base_images" | wc -l)" -ne 1 ]; then
+    echo "$base_images" >&2
+    exit 1
+fi
